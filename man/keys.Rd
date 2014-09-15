@@ -2,12 +2,15 @@
 \name{keys}
 \alias{github_key}
 \alias{keys}
+\alias{local_key}
 \alias{travis_key}
 \title{Retrieve public keys.}
 \usage{
 travis_key(repo)
 
 github_key(username, i = 1)
+
+local_key(name)
 }
 \arguments{
 \item{repo}{Travis repository name (x/y)}
@@ -15,6 +18,9 @@ github_key(username, i = 1)
 \item{username}{Github username}
 
 \item{i}{Key to use, if more than one}
+
+\item{name}{Name of key. If missing, uses first file in directory,
+otherwise uses first file that matches \code{name}.}
 }
 \description{
 Retrieve public keys.

@@ -4,6 +4,7 @@
 #' @examples
 #' travis_key("hadley/dplyr")
 #' github_key("hadley")
+#' local_key()
 NULL
 
 #' @rdname keys
@@ -27,4 +28,23 @@ github_key <- function(username, i = 1) {
   httr::stop_for_status(r)
 
   httr::content(r)[[i]]$key
+}
+
+#' @rdname keys
+#' @param name Name of key. If missing, uses first file in directory,
+#'   otherwise uses first file that matches \code{name}.
+#' @export
+local_key <- function(name) {
+  public_keys <- dir("~/.ssh", pattern = "\\.pub$", full.names = TRUE)
+
+  if (missing(name)) {
+    key <- public_keys[[1]]
+  } else {
+    matches <- grepl(name, public_keys, fixed = TRUE)
+    if (!any(matches)) stop("No key matches ", name, call. = FALSE)
+
+    key <- public_keys[matches][[1]]
+  }
+
+  readLines(key)
 }
