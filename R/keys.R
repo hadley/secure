@@ -82,7 +82,7 @@ parse_pubkey_string <- function(key, type = NULL) {
 
   type <- match.arg(type, c("ssh", "ssl"))
   switch(type,
-    ssh = PKI::PKI.load.key(PKI::PKI.load.OpenSSH.pubkey(con)),
-    ssl = PKI::PKI.load.key(textConnection(key))
+    ssh = PKI::PKI.load.OpenSSH.pubkey(con, format = "key"),
+    ssl = PKI::PKI.load.key(con)
   )
 }
