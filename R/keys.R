@@ -15,7 +15,7 @@ travis_key <- function(repo) {
   r <- httr::GET(url)
   httr::stop_for_status(r)
 
-  httr::content(r)$key[[1]]
+  parse_pubkey_string(gsub(" RSA", "", httr::content(r)$key[[1]]))
 }
 
 #' @rdname keys
