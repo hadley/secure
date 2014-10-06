@@ -6,13 +6,13 @@
 \usage{
 parse_pubkey(path, type = NULL)
 
-parse_pubkey_string(key, type = c("ssh", "ssl"))
+parse_pubkey_string(key, type = NULL)
 }
 \arguments{
 \item{path}{Path to load public key file from}
 
-\item{type}{Type of public key ("ssh" or "ssl"). If omitted from
-\code{\link{parse_pubkey}}, will be guessed from the extension.}
+\item{type}{Type of public key ("ssh" or "ssl"). If omitted, will attempt
+to guess from contents of key.}
 
 \item{key}{Key as a string}
 }

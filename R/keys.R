@@ -52,8 +52,8 @@ local_key <- function(name = "id") {
 #' Parse public key
 #'
 #' @param path Path to load public key file from
-#' @param type Type of public key ("ssh" or "ssl"). If omitted from
-#'   \code{\link{parse_pubkey}}, will be guessed from the extension.
+#' @param type Type of public key ("ssh" or "ssl"). If omitted, will attempt
+#'   to guess from contents of key.
 #' @param key Key as a string
 #' @examples
 #' \donttest{
@@ -61,26 +61,26 @@ local_key <- function(name = "id") {
 #' parse_pubkey("~/.ssh/id_rsa.pem")
 #' }
 parse_pubkey <- function(path, type = NULL) {
-
-  if (is.null(type)) {
-    ext <- tools::file_ext(path)
-    type <- switch(ext,
-      pub = "ssh",
-      pem = "ssl"
-    )
-  }
-
   parse_pubkey_string(readLines(path), type)
 }
 
 #' @export
 #' @rdname parse_pubkey
-parse_pubkey_string <- function(key, type = c("ssh", "ssl")) {
-  type <- match.arg(type)
+parse_pubkey_string <- function(key, type = NULL) {
+  if (is.null(type)) {
+    if (any(grepl("PUBLIC KEY", key))) {
+      type <- "ssl"
+    } else if (any(grepl("ssh-rsa", key))) {
+      type <- "ssh"
+    } else {
+      stop("Don't know how to guess the type of this key")
+    }
+  }
 
   con <- textConnection(key)
   on.exit(close(con))
 
+  type <- match.arg(type, c("ssh", "ssl"))
   switch(type,
     ssh = PKI::PKI.load.key(PKI::PKI.load.OpenSSH.pubkey(con)),
     ssl = PKI::PKI.load.key(textConnection(key))
