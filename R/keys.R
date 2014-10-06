@@ -27,7 +27,7 @@ github_key <- function(username, i = 1) {
   r <- httr::GET(url)
   httr::stop_for_status(r)
 
-  httr::content(r)[[i]]$key
+  parse_pubkey_string(httr::content(r)[[i]]$key)
 }
 
 #' @rdname keys
@@ -35,7 +35,7 @@ github_key <- function(username, i = 1) {
 #'   otherwise uses first file that matches \code{name}.
 #' @export
 local_key <- function(name = "id") {
-  public_keys <- dir("~/.ssh", pattern = "\\.pub$", full.names = TRUE)
+  public_keys <- dir("~/.ssh", pattern = "\\.(pub|pem)$", full.names = TRUE)
 
   if (missing(name)) {
     key <- public_keys[[1]]
@@ -46,7 +46,7 @@ local_key <- function(name = "id") {
     key <- public_keys[matches][[1]]
   }
 
-  readLines(key)
+  parse_pubkey(key)
 }
 
 #' Parse public key
