@@ -5,8 +5,8 @@ add_user <- function(name, public_key, pkg = ".") {
   new_user <- list(name = name, public_key = public_key)
 
   users <- c(load_users(pkg), list(new_user))
-  save_users(users, pkg = ".")
-  # recrypt(users)
+  save_users(users)
+  recrypt(pkg)
 }
 
 load_users <- function(pkg = ".") {
@@ -35,4 +35,5 @@ save_users <- function(users, pkg = ".") {
 
   path <- file.path(pkg$path, "secure", ".users.json")
   writeLines(jsonlite::toJSON(users, pretty = TRUE), path)
+  invisible(TRUE)
 }
