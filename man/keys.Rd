@@ -10,7 +10,7 @@ travis_key(repo)
 
 github_key(username, i = 1)
 
-local_key(name)
+local_key(name = "id")
 }
 \arguments{
 \item{repo}{Travis repository name (x/y)}
@@ -28,5 +28,6 @@ Retrieve public keys.
 \examples{
 travis_key("hadley/dplyr")
 github_key("hadley")
+local_key()
 }
 

@@ -34,7 +34,7 @@ github_key <- function(username, i = 1) {
 #' @param name Name of key. If missing, uses first file in directory,
 #'   otherwise uses first file that matches \code{name}.
 #' @export
-local_key <- function(name) {
+local_key <- function(name = "id") {
   public_keys <- dir("~/.ssh", pattern = "\\.pub$", full.names = TRUE)
 
   if (missing(name)) {
@@ -47,4 +47,42 @@ local_key <- function(name) {
   }
 
   readLines(key)
+}
+
+#' Parse public key
+#'
+#' @param path Path to load public key file from
+#' @param type Type of public key ("ssh" or "ssl"). If omitted from
+#'   \code{\link{parse_pubkey}}, will be guessed from the extension.
+#' @param key Key as a string
+#' @examples
+#' \donttest{
+#' parse_pubkey("~/.ssh/id_rsa.pub")
+#' parse_pubkey("~/.ssh/id_rsa.pem")
+#' }
+parse_pubkey <- function(path, type = NULL) {
+
+  if (is.null(type)) {
+    ext <- tools::file_ext(path)
+    type <- switch(ext,
+      pub = "ssh",
+      pem = "ssl"
+    )
+  }
+
+  parse_pubkey_string(readLines(path), type)
+}
+
+#' @export
+#' @rdname parse_pubkey
+parse_pubkey_string <- function(key, type = c("ssh", "ssl")) {
+  type <- match.arg(type)
+
+  con <- textConnection(key)
+  on.exit(close(con))
+
+  switch(type,
+    ssh = PKI::PKI.load.key(PKI::PKI.load.OpenSSH.pubkey(con)),
+    ssl = PKI::PKI.load.key(textConnection(key))
+  )
 }

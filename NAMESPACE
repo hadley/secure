@@ -2,4 +2,5 @@
 
 export(github_key)
 export(local_key)
+export(parse_pubkey_string)
 export(travis_key)
