@@ -18,6 +18,13 @@ travis_key <- function(repo) {
   parse_pubkey_string(gsub(" RSA", "", httr::content(r)$key[[1]]))
 }
 
+travis_encrypt <- function(repo, string) {
+  stopifnot(is.character(string), length(string) == 1)
+
+  key <- travis_key(repo)
+  PKI::raw2hex(PKI::PKI.encrypt(charToRaw(string), key), sep = "")
+}
+
 #' @rdname keys
 #' @param username Github username
 #' @param i Key to use, if more than one
