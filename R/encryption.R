@@ -1,3 +1,17 @@
+#' Encrypt and decrypt data.
+#'
+#' @param .name,name Name of storage locker.
+#' @param ... Name-value pairs of objects to store.
+#' @param .pkg,pkg Path to package. Defaults to current directory.
+#' @export
+#' @examples
+#' \dontrun{
+#' encrypt("test", x = 1, y = 2)
+#' # Encrypting to same file adds fields
+#' encrypt("test", z = 3)
+#'
+#' decrypt("test")
+#' }
 encrypt <- function(.name, ..., .pkg = ".") {
   pkg <- devtools::as.package(.pkg)
   key <- my_key()
@@ -16,6 +30,8 @@ encrypt <- function(.name, ..., .pkg = ".") {
   writeBin(enc, path)
 }
 
+#' @rdname encrypt
+#' @export
 decrypt <- function(name, pkg = ".") {
   pkg <- devtools::as.package(pkg)
   key <- my_key()
