@@ -12,12 +12,7 @@ encrypt <- function(.name, ..., .pkg = ".") {
 #   }
 
   ser <- serialize(values, connection = NULL)
-
   enc <- PKI::PKI.encrypt(ser, key, "AES-256")
-#   dec <- PKI::PKI.decrypt(enc, key, "AES-256")
-#   all.equal(ser, dec)
-#   unserialize(dec)
-
   writeBin(enc, path)
 }
 
