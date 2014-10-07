@@ -35,23 +35,11 @@ locker_path <- function(name, pkg = ".") {
   stopifnot(is.character(name), length(name) == 1)
   pkg <- devtools::as.package(pkg)
 
-  if (!grepl("\\.enc-rds", name)) {
-    name <- paste0(name, ".enc-rds")
+  if (!grepl("\\.rds.enc", name)) {
+    name <- paste0(name, ".rds.enc")
   }
 
   file.path(pkg$path, "secure", name)
-}
-
-recrypt <- function(pkg = ".", key = new_key()) {
-  message("Re-encrypting all files with new key")
-  pkg <- devtools::as.package(pkg)
-
-  users <- load_users(pkg)
-  users <- lapply(users, function(x) {
-    x$key <- PKI::raw2hex(PKI::PKI.encrypt(key, x$public_key), sep = "")
-    x
-  })
-  save_users(users)
 }
 
 my_key <- function(key = local_key(), pkg = ".") {
@@ -63,9 +51,17 @@ my_key <- function(key = local_key(), pkg = ".") {
     stop("Could not uniquely identify user")
   }
 
-  me[[1]]$key
+  private_key <- PKI::PKI.load.key(file = "~/.ssh/id_rsa")
+  PKI::PKI.decrypt(base64enc::base64decode(me[[1]]$key), private_key)
 }
 
-new_key <- function(n = 50) {
-  as.raw(sample(255, n, rep = TRUE))
+hex2raw = function(h) {
+  x <- strsplit(tolower(h), "")[[1L]]
+  pos <- match(x, c(0L:9L, letters[1L:6L]))
+
+  unname(pos)
+}
+
+new_key <- function(n = 87) {
+  as.raw(sample(1:255, n, rep = TRUE))
 }

@@ -44,10 +44,10 @@ github_key <- function(username, i = 1) {
 local_key <- function(name = "id") {
   public_keys <- dir("~/.ssh", pattern = "\\.(pub|pem)$", full.names = TRUE)
 
-  if (missing(name)) {
+  if (is.null(name)) {
     key <- public_keys[[1]]
   } else {
-    matches <- grepl(name, public_keys, fixed = TRUE)
+    matches <- grepl(name, basename(public_keys), fixed = TRUE)
     if (!any(matches)) stop("No key matches ", name, call. = FALSE)
 
     key <- public_keys[matches][[1]]
@@ -89,7 +89,7 @@ parse_pubkey_string <- function(key, type = NULL) {
 
   type <- match.arg(type, c("ssh", "ssl"))
   switch(type,
-    ssh = PKI::PKI.load.OpenSSH.pubkey(con, format = "key"),
+    ssh = PKI::PKI.load.OpenSSH.pubkey(key, format = "key"),
     ssl = PKI::PKI.load.key(con)
   )
 }

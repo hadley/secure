@@ -3,10 +3,37 @@ add_user <- function(name, public_key, pkg = ".") {
   stopifnot(inherits(public_key, "public.key"))
 
   new_user <- list(name = name, public_key = public_key)
-
   users <- c(load_users(pkg), list(new_user))
   save_users(users)
-  recrypt(pkg)
+
+  recrypt_all(pkg)
+}
+
+recrypt_all <- function(pkg = ".", key = new_key()) {
+  message("Re-encrypting all files with new key")
+  pkg <- devtools::as.package(pkg)
+
+  # Encrypt new password for each user
+  users <- load_users(pkg)
+  users <- lapply(users, function(x) {
+    x$key <- base64enc::base64encode(PKI::PKI.encrypt(key, x$public_key))
+    x
+  })
+  save_users(users)
+
+  # Decrypt & reencrypt each file
+  files <- dir(file.path(pkg$path, "secure"), "\\.rds\\.enc$",
+    full.names = TRUE)
+  lapply(files, recrypt, old_key = my_key(), new_key = key)
+
+  invisible(TRUE)
+}
+
+recrypt <- function(path, old_key, new_key) {
+  enc <- readBin(path, "raw", file.info(path)$size)
+  dec <- PKI::PKI.decrypt(enc, old_key, "AES-256")
+  enc <- PKI::PKI.encrypt(dec, new_key, "AES-256")
+  writeBin(enc, path)
 }
 
 load_users <- function(pkg = ".") {
@@ -37,3 +64,4 @@ save_users <- function(users, pkg = ".") {
   writeLines(jsonlite::toJSON(users, pretty = TRUE), path)
   invisible(TRUE)
 }
+
