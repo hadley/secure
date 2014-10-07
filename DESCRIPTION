@@ -1,5 +1,5 @@
 Package: secure
-Title: Secure R objects so they can only be read by specified people.
+Title: Secure R Objects so They Can Only be Read by Specified People.
 Version: 0.1
 Authors@R: as.person(c(
     "Hadley Wickham <hadley@rstudio.com> [aut,cre]",
