@@ -3,13 +3,13 @@ encrypt <- function(.name, ..., .pkg = ".") {
   key <- my_key()
 
   values <- list(...)
-  path <- file.path(pkg$path, "secure", paste0(.name, ".enc-rds"))
+  path <- locker_path(.name, pkg)
 
-#   if (file.exists(path)) {
-#     message("Merging with existing data")
-#     old_values <- decrypt(basename(path), pkg = pkg)
-#     values <- modifyList(old_values, values)
-#   }
+  if (file.exists(path)) {
+    message("Merging with existing data")
+    old_values <- decrypt(basename(path), pkg = pkg)
+    values <- modifyList(old_values, values)
+  }
 
   ser <- serialize(values, connection = NULL)
   enc <- PKI::PKI.encrypt(ser, key, "AES-256")
@@ -20,8 +20,7 @@ decrypt <- function(name, pkg = ".") {
   pkg <- devtools::as.package(pkg)
   key <- my_key()
 
-  if (!grepl("\\.enc-rds", name))
-  path <- file.path(pkg$path, "secure", paste0(name, ".enc-rds"))
+  path <- locker_path(name, pkg)
   if (!file.exists(path)) {
     stop(path, " does not exist", call. = FALSE)
   }
@@ -30,6 +29,17 @@ decrypt <- function(name, pkg = ".") {
   dec <- PKI::PKI.decrypt(enc, key, "AES-256")
 
   unserialize(dec)
+}
+
+locker_path <- function(name, pkg = ".") {
+  stopifnot(is.character(name), length(name) == 1)
+  pkg <- devtools::as.package(pkg)
+
+  if (!grepl("\\.enc-rds", name)) {
+    name <- paste0(name, ".enc-rds")
+  }
+
+  file.path(pkg$path, "secure", name)
 }
 
 recrypt <- function(pkg = ".", key = new_key()) {
