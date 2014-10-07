@@ -7,10 +7,11 @@ Authors@R: as.person(c(
     ))
 Description: Sometimes it's useful to put private information in
     a public repository. Secure lets you share private information with
-    selected inidividuals through the magic of assymetric encryption.
+    selected individuals through the magic of assymetric encryption.
 Imports:
     httr,
     base64enc,
+    jsonlite,
     PKI (>= 0.1-2),
     devtools
 License: GPL-3

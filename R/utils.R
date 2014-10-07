@@ -1,5 +1,5 @@
 new_key <- function(n = 87) {
-  as.raw(sample(1:255, n, rep = TRUE))
+  as.raw(sample(1:255, n, replace = TRUE))
 }
 
 #' @export
