@@ -8,6 +8,7 @@ Secure is currently only available on github. Install it with:
 
 ```R
 # install.packages("devtools")
+devtools::install_github("s-u/PKI") # needed for bug fixes
 devtools::install_github("hadley/secure")
 ```
 
