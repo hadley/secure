@@ -1,5 +1,7 @@
 # secure
 
+[![Build Status](https://travis-ci.org/hadley/secure.png?branch=master)](https://travis-ci.org/hadley/secure)
+
 The secure pacakge provides a secure enclave within a publicly available code repository. It uses public key encryption to allow you to share a file with a select list of collaborators. This is particularly useful for testing web APIS: you can encrypt credentials so that you can both use them locally and on travis.
 
 ## Installation
