@@ -70,7 +70,3 @@ my_key <- function(key = local_key(), pkg = ".") {
   private_key <- PKI::PKI.load.key(file = "~/.ssh/id_rsa")
   PKI::PKI.decrypt(base64enc::base64decode(me[[1]]$key), private_key)
 }
-
-new_key <- function(n = 87) {
-  as.raw(sample(1:255, n, rep = TRUE))
-}

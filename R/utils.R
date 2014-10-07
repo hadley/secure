@@ -1,3 +1,7 @@
+new_key <- function(n = 87) {
+  as.raw(sample(1:255, n, rep = TRUE))
+}
+
 #' @export
 print.public.key <- function(x, ...) {
   cat("<public_key> ", PKI::raw2hex(fingerprint(x), ":"), "\n", sep = "")
