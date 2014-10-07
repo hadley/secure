@@ -1,10 +1,13 @@
 Package: secure
-Title: What the package does (one line)
+Title: Secure R objects so they can only be read by specified people.
 Version: 0.1
-Authors@R: 'Hadley Wickham <h.wickham@gmail.com> [aut,cre]'
-Description: What the package does (one paragraph)
-Depends:
-    R (>= 3.1.0)
+Authors@R: as.person(c(
+    "Hadley Wickham <hadley@rstudio.com> [aut,cre]",
+    "RStudio [cph]"
+    ))
+Description: Sometimes it's useful to put private information in
+    a public repository. Secure lets you share private information with
+    selected inidividuals through the magic of assymetric encryption.
 Imports:
     httr,
     base64enc,
