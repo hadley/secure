@@ -10,6 +10,7 @@ use_secure(pkg = ".")
 }
 \description{
 This creates a \code{secure/} directory, adds it to \code{.Rbuildignore},
-and adds secure to \code{Suggests}.
+and adds secure to \code{Suggests}. Use \code{\link{add_user}()} to add a
+new user, then \code{\link{encrypt}()} to encrypt data.
 }
 

@@ -1,3 +1,13 @@
+#' Add a new user.
+#'
+#' Adding a new user will re-generate the master key and re-encrypt all
+#' secured files.
+#'
+#' @param name Name of user. Currently only used to help you remember who
+#'   owns the public key
+#' @param public_key Users public key.
+#' @param pkg Path to package. Defaults to working directory
+#' @export
 add_user <- function(name, public_key, pkg = ".") {
   pkg <- devtools::as.package(pkg)
   stopifnot(inherits(public_key, "public.key"))

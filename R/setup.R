@@ -1,7 +1,8 @@
 #' Set up a package with a secure enclave.
 #'
 #' This creates a \code{secure/} directory, adds it to \code{.Rbuildignore},
-#' and adds secure to \code{Suggests}.
+#' and adds secure to \code{Suggests}. Use \code{\link{add_user}()} to add a
+#' new user, then \code{\link{encrypt}()} to encrypt data.
 #'
 #' @param pkg Path to package. Defaults to working directory.
 #' @export

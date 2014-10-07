@@ -62,6 +62,7 @@ local_key <- function(name = "id") {
 #' @param type Type of public key ("ssh" or "ssl"). If omitted, will attempt
 #'   to guess from contents of key.
 #' @param key Key as a string
+#' @keywords internal
 #' @examples
 #' \donttest{
 #' parse_pubkey("~/.ssh/id_rsa.pub")

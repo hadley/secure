@@ -25,4 +25,5 @@ parse_pubkey("~/.ssh/id_rsa.pub")
 parse_pubkey("~/.ssh/id_rsa.pem")
 }
 }
+\keyword{internal}
 

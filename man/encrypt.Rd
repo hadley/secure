@@ -2,7 +2,7 @@
 \name{encrypt}
 \alias{decrypt}
 \alias{encrypt}
-\title{Encrypt and decrpyt data.}
+\title{Encrypt and decrypt data.}
 \usage{
 encrypt(.name, ..., .pkg = ".")
 
@@ -16,7 +16,7 @@ decrypt(name, pkg = ".")
 \item{.pkg,pkg}{Path to package. Defaults to current directory.}
 }
 \description{
-Encrypt and decrpyt data.
+Encrypt and decrypt data.
 }
 \examples{
 \dontrun{
