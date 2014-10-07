@@ -71,13 +71,6 @@ my_key <- function(key = local_key(), pkg = ".") {
   PKI::PKI.decrypt(base64enc::base64decode(me[[1]]$key), private_key)
 }
 
-hex2raw = function(h) {
-  x <- strsplit(tolower(h), "")[[1L]]
-  pos <- match(x, c(0L:9L, letters[1L:6L]))
-
-  unname(pos)
-}
-
 new_key <- function(n = 87) {
   as.raw(sample(1:255, n, rep = TRUE))
 }
