@@ -8,6 +8,20 @@
 #' @param public_key Users public key.
 #' @param pkg Path to package. Defaults to working directory
 #' @export
+#' @examples
+#' \dontrun{
+#' # Add a github user:
+#' add_user("hadley", github_key("hadley"))
+#' remove_user("hadley")
+#'
+#' # Add yourself:
+#' add_user("hadley", local_key())
+#' remove_user("hadley")
+#'
+#' # Add travis user
+#' add_user("travis", travis_key("hadley/secure"))
+#' remove_user("travis")
+#' }
 add_user <- function(name, public_key, pkg = ".") {
   pkg <- devtools::as.package(pkg)
   stopifnot(inherits(public_key, "public.key"))

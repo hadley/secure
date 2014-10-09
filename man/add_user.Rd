@@ -20,4 +20,19 @@ owns the public key}
 Adding or removing users will re-generate the master key and re-encrypt all
 secured files.
 }
+\examples{
+\dontrun{
+# Add a github user:
+add_user("hadley", github_key("hadley"))
+remove_user("hadley")
+
+# Add yourself:
+add_user("hadley", local_key())
+remove_user("hadley")
+
+# Add travis user
+add_user("travis", travis_key("hadley/secure"))
+remove_user("travis")
+}
+}
 
