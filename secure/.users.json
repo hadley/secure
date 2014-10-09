@@ -13,7 +13,21 @@
             "-----END PUBLIC KEY-----"
         ],
         "key": [
-            "n3advT2Bl696BU/nWg18i/as68sOHEvBlNwLCKlUHBVLErG9wOQh9z086tsv+tbtw9iIBTKJno4pTkP2aJ2VAu4eiO6JRDry4QiAnypFKOtkxp1H0Fmi+C96R/yvuUw47f2XZ6Oho1/n3rLv4DKfQ+wDzglEashumd4w3ygjM5SdmD54KpjSpJKlqJ6GOInavL2fsJbbD33adowTEKXxkmgrD2wd+Ir1RuQTaAV3qjYVOUKa8VYycfnzkc8pSHb1ComVNgD3wdE5iQhBvUXe8j893H9m7Vb2OcJ1lPdUZJW2AEZ50agtY+NOSN/dX0bJHla44VwCPPYrWGI7PRjORw=="
+            "oa8id0c9k3eW+byiPRcy1ZnGRrc6cLGIgq9WHriCmZYR+Kh78nhVCWcsp6xAnYCXyfkzTPA5crh8siM+u6MZB9L7cJU5uo6Oa0mfa2KoafUEhRjjLeFkrAAd+HseEWQnuMRw1lu5I/vEH9xr3/MK9Z2qLU/fMLsZw/t2ZQQRfOu3NnYKUChb7EsPt/VmKZEaGX4PJzRtIX9v5qIxIBXCbyhdFY4qWyKR+lvWDvN8ojVV0q2W4p1ZZ0bQrcoBmM31tGGVX4WdbUbDq4IPnWZUr7CiCN2xbHvF6r/CyCAfZl/nCzVkN35shaOYE1z8mXe+3dShA+jLb0d9nGGKCCp8AA=="
+        ]
+    },
+    {
+        "name": "travis",
+        "public_key": [
+            "-----BEGIN PUBLIC KEY-----",
+            "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDHVyzq8Smnh2BQdvRieRVjKer2",
+            "J36hMVgdJDABDpMIrCKSeeA4tF9nGm1mmcBB8teXU4M6Fls8lHehRlcOaFNl7Rgv",
+            "ydahOFK9CFU7RZJ+VTwJVUrDjo8i2tjNGfkAb8LWsswap7G2df3Cn7GoAyrEzrX0",
+            "ufbBh0ujTSdeBiQjVwIDAQAB",
+            "-----END PUBLIC KEY-----"
+        ],
+        "key": [
+            "vQaewMk0b151ShDWanuaoUJsLvdlkVj8rigpxFsBkukMwKRWMFdfq0pTszY7XwcjJwIv31vj1wJfSFhdr4mQLFt7Oqz57HZjFevmiwYYHv2sTtpAKSekLcoTGyntGwu8Bo5DQKpOaLX3NXl5RpRE0TpfmVf7gH27lIfe+QJFtZc="
         ]
     }
 ]
