@@ -6,6 +6,7 @@ before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
+  - ls ~/.ssh/
 
 install:
   - ./travis-tool.sh github_package s-u/PKI
