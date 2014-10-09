@@ -28,6 +28,8 @@ Retrieve public keys.
 \examples{
 travis_key("hadley/dplyr")
 github_key("hadley")
+\donttest{
 local_key()
+}
 }
 
