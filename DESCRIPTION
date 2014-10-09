@@ -14,5 +14,7 @@ Imports:
     jsonlite,
     PKI (>= 0.1-3),
     devtools
+Suggests:
+    testthat
 License: GPL-3
 LazyData: true

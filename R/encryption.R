@@ -70,3 +70,36 @@ my_key <- function(key = local_key(), pkg = ".") {
   private_key <- PKI::PKI.load.key(file = "~/.ssh/id_rsa")
   PKI::PKI.decrypt(base64enc::base64decode(me[[1]]$key), private_key)
 }
+
+
+#' Can you unlock the secure storage?
+#'
+#' This ensures that we can find your private key, and you can decrypt
+#' the encrypted master key.
+#'
+#' @return A boolean flag.
+#' @export
+has_key <- function() {
+  tryCatch({
+    my_key
+    TRUE
+  }, error = function(e) FALSE)
+}
+
+
+#' Skip tests when you can't unlock
+#'
+#' This is useful to place at the top of tests that rely on access to secured
+#' assets. Skipped tests do not generate an error in R CMD check etc, but
+#' will print a visible notification.
+#'
+#' @export
+skip_when_missing_key <- function() {
+
+  if (requireNamespace("testthat", quietly = TRUE)) {
+    stop("testthat not installed", call. = FALSE)
+  }
+
+  if (has_key()) return()
+  testthat::skip("Credentials to unlock secure files not available.")
+}
