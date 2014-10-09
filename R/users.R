@@ -1,6 +1,6 @@
-#' Add a new user.
+#' Add and remove users user.
 #'
-#' Adding a new user will re-generate the master key and re-encrypt all
+#' Adding or removing users will re-generate the master key and re-encrypt all
 #' secured files.
 #'
 #' @param name Name of user. Currently only used to help you remember who
@@ -16,6 +16,21 @@ add_user <- function(name, public_key, pkg = ".") {
   users <- c(load_users(pkg), list(new_user))
   save_users(users)
 
+  recrypt_all(pkg)
+}
+
+#' @rdname add_user
+#' @export
+remove_user <- function(name, pkg = ".") {
+  pkg <- devtools::as.package(pkg)
+  users <- load_users(pkg)
+
+  matching <- vapply(users, function(x) identical(x$name, name), logical(1))
+  if (!any(matching)) {
+    stop("Could not find user called ", name, call. = FALSE)
+  }
+
+  save_users(users[!matching])
   recrypt_all(pkg)
 }
 
