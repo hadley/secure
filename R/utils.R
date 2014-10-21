@@ -4,7 +4,12 @@ new_key <- function(n = 40) {
 
 #' @export
 print.public.key <- function(x, ...) {
-  cat("<public_key> ", PKI::raw2hex(fingerprint(x), ":"), "\n", sep = "")
+  cat("<public_key> ", format(x), "\n", sep = "")
+}
+
+#' @export
+format.public.key <- function(x, ...) {
+  PKI::raw2hex(fingerprint(x), ":")
 }
 
 # From Simon Urbanek

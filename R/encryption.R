@@ -70,8 +70,11 @@ my_key <- function(key = local_key(), pkg = ".") {
   same_key <- function(x) identical(PKI::PKI.save.key(x$public_key, "DER"), der)
 
   me <- Filter(same_key, load_users(pkg))
-  if (length(me) != 1) {
-    stop("Could not uniquely identify user")
+  if (length(me) == 0) {
+    stop("No user matches public key ", format(key), call. = FALSE)
+  } else if (length(me) > 1) {
+    stop("Multiple users match public key: ", paste0(names(me), collapse = ", "),
+      call. = FALSE)
   }
 
   private_key <- PKI::PKI.load.key(file = "~/.ssh/id_rsa")
