@@ -3,7 +3,7 @@ as.package <- function(path = ".") {
 
   check_dir(path)
 
-  vault_path <- file.path(path, "secure")
+  vault_path <- file.path(path, "vault")
   check_dir(vault_path)
 
   structure(list(path = path, vault = vault_path), class = "package")
