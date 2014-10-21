@@ -28,7 +28,7 @@ add_user <- function(name, public_key, pkg = ".") {
 
   new_user <- list(name = name, public_key = public_key)
   users <- c(load_users(pkg), list(new_user))
-  save_users(users)
+  save_users(users, pkg = pkg)
 
   recrypt_all(pkg)
 }
@@ -44,7 +44,7 @@ remove_user <- function(name, pkg = ".") {
     stop("Could not find user called ", name, call. = FALSE)
   }
 
-  save_users(users[!matching])
+  save_users(users[!matching], pkg = pkg)
   recrypt_all(pkg)
 }
 

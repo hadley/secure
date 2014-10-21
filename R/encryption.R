@@ -34,7 +34,7 @@ encrypt <- function(.name, ..., .pkg = ".") {
 #' @export
 decrypt <- function(name, pkg = ".") {
   pkg <- devtools::as.package(pkg)
-  key <- my_key()
+  key <- my_key(pkg = pkg)
 
   path <- locker_path(name, pkg)
   if (!file.exists(path)) {
@@ -105,7 +105,7 @@ has_key <- function() {
 #' @export
 skip_when_missing_key <- function() {
 
-  if (requireNamespace("testthat", quietly = TRUE)) {
+  if (!requireNamespace("testthat", quietly = TRUE)) {
     stop("testthat not installed", call. = FALSE)
   }
 
