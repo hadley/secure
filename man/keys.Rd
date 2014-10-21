@@ -10,7 +10,7 @@ travis_key(repo)
 
 github_key(username, i = 1)
 
-local_key(name = "id")
+local_key(name = "id_rsa")
 }
 \arguments{
 \item{repo}{Travis repository name (x/y)}
