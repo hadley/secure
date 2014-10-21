@@ -1,4 +1,4 @@
-new_key <- function(n = 87) {
+new_key <- function(n = 40) {
   as.raw(sample(1:255, n, replace = TRUE))
 }
 

@@ -59,6 +59,12 @@ locker_path <- function(name, pkg = ".") {
 }
 
 my_key <- function(key = local_key(), pkg = ".") {
+  # Travis needs a slightly different strategy because we can't access the
+  # private key - instead we let travis encrypt the key in an env var
+  if (is_travis()) {
+    return(Sys.getenv("SECURE_KEY"))
+  }
+
   der <- PKI::PKI.save.key(key, "DER")
   same_key <- function(x) identical(PKI::PKI.save.key(x$public_key, "DER"), der)
 
@@ -71,6 +77,9 @@ my_key <- function(key = local_key(), pkg = ".") {
   PKI::PKI.decrypt(base64enc::base64decode(me[[1]]$key), private_key)
 }
 
+is_travis <- function() {
+  identical(Sys.getenv("TRAVIS"), "true")
+}
 
 #' Can you unlock the secure storage?
 #'

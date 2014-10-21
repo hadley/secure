@@ -54,10 +54,7 @@ recrypt_all <- function(pkg = ".", key = new_key()) {
 
   # Encrypt new password for each user
   users <- load_users(pkg)
-  users <- lapply(users, function(x) {
-    x$key <- base64enc::base64encode(PKI::PKI.encrypt(key, x$public_key))
-    x
-  })
+  users <- lapply(users, recrypt_user, key = key)
   save_users(users)
 
   # Decrypt & reencrypt each file
@@ -67,6 +64,23 @@ recrypt_all <- function(pkg = ".", key = new_key()) {
 
   invisible(TRUE)
 }
+
+recrypt_user <- function(x, key) {
+  x$key <- base64enc::base64encode(PKI::PKI.encrypt(key, x$public_key))
+  if (identical(x$name, "travis")) {
+    envvar <- charToRaw(paste0("KEY=", base64enc::base64encode(key)))
+    secure <- base64enc::base64encode(PKI::PKI.encrypt(envvar, x$public_key))
+
+    message(
+      "Please add/replace the following yaml in .travis.yaml:\n",
+      "  env: \n",
+      "  - secure: ", secure, "\n"
+    )
+  }
+
+  x
+}
+
 
 recrypt <- function(path, old_key, new_key) {
   enc <- readBin(path, "raw", file.info(path)$size)
