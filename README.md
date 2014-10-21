@@ -2,7 +2,9 @@
 
 [![Build Status](https://travis-ci.org/hadley/secure.png?branch=master)](https://travis-ci.org/hadley/secure)
 
-The secure pacakge provides a secure enclave within a publicly available code repository. It uses public key encryption to allow you to share a file with a select list of collaborators. This is particularly useful for testing web APIS: you can encrypt credentials so that you can both use them locally and on travis.
+The secure package provides a secure vault within a publicly available code repository. It allows you to store private information in a public repository so that only select people can read it. This is particularly useful for testing because you can now store private credentials in your public repo, without them being readable by the world.
+
+Secure is built on top of asymmetric (public/private key) encryption. Secure generates a random master key and uses that to encrypt (with AES256) each file in `vault/`. The master key is not stored unencrypted anywhere; instead, an encrypted copy is stored for each user, using their own public key. Each user can than decrypt the encrypted master key using their private key, then use that to decrypt each file.
 
 ## Installation
 
@@ -10,11 +12,11 @@ Secure is currently only available on github. Install it with:
 
 ```R
 # install.packages("devtools")
-devtools::install_github("s-u/PKI") # needed for bug fixes
+devtools::install_github("s-u/PKI") # needed for bug fixes not currently on CRAN
 devtools::install_github("hadley/secure")
 ```
 
-## Basic principles
+## First steps
 
 To get started:
 
@@ -39,10 +41,10 @@ To get started:
 * If you use travis, add the public key for your travis repo:
   `secure::add_user("travis", travis_key("user/repo"))`.
 
-* When developing locally, you can use all functions as is. They work using
-  the current working directory.
+* When developing locally, you can use all functions as is. They look for
+  a vault in the working directory.
   
-* In tests, supply the package name in the vault argument. For example,
+* In tests, supply the package name to the `vault` argument. For example,
   one of the tests for the secure package looks like this:
   
     ```R
@@ -56,12 +58,6 @@ To get started:
       expect_equal(test$b, 2)
     })
     ```
-
-## How it works
-
-Each file is encrypted (using AES256) with the same master key. The master key is not stored unencrypted anywhere, instead it's encrypted once for each user, using their public key. 
-
-When you add a new user (or remove an old user), a new master key is generated and all files are re-encrypted.
 
 ## Caveats
 
