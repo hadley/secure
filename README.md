@@ -16,22 +16,46 @@ devtools::install_github("hadley/secure")
 
 ## Basic principles
 
-To get started, run `secure::use_secure()` in a package working directory. This will:
+To get started:
 
-* Create a `inst/vault/` directory.
-* Add it to `.Rbuildignore`.
-* Add secure to the `Suggests` field in `DESCRIPTION`.
+* Create a `vault` directory.
 
-Next, add yourself as as user with `secure::add_user("your name", local_key())`. This will add your name and public key to `vault/users.json`.  (Add other people using their `github_key()`s, and add travis using `travis_key()`.)
+* Add yourself as as user with `secure::add_user("your name", local_key())`. 
+  This will add your name and public key to `vault/users.json`.
+  (You can add other people from their `github_key()`s).
 
-Now you can start adding encrypted data:
+* Securely store data: 
+  `secure::encrypt("google", key = "abcdasdf", secret = "asdfsad")`.
+  This creates `secure/google.rds.enc`, an encrypted rds file.
 
-```R
-secure::encrypt("google", key = "abcdasdf", secret = "asdfsad")
-secure::decrypt("google")
-```
+* Retrieve encrypted data: `secure::decrypt("google")`. This decrypts
+  the encrypted file using your private key.
 
-This creates `secure/google.rds.enc`, an encrypted rds file.
+## In a package
+
+* Create `inst/vault` and add `secure` to the `Suggests` field in the 
+  `DESCRIPTION` (or run `secure::use_secure()`).
+
+* If you use travis, add the public key for your travis repo:
+  `secure::add_user("travis", travis_key("user/repo"))`.
+
+* When developing locally, you can use all functions as is. They work using
+  the current working directory.
+  
+* In tests, supply the package name in the vault argument. For example,
+  one of the tests for the secure package looks like this:
+  
+    ```R
+    test_that("can decrypt secrets", {
+      # Skips the test if doesn't have the key to open the secure vault
+      skip_when_missing_key("secure")
+      
+      # Decrypt a file stored in secure/inst/vault
+      test <- decrypt("test", vault = "secure")
+      expect_equal(test$a, 1)
+      expect_equal(test$b, 2)
+    })
+    ```
 
 ## How it works
 
