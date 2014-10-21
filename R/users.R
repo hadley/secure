@@ -48,7 +48,7 @@ remove_user <- function(name, pkg = ".") {
   recrypt(pkg)
 }
 
-recrypt <- function(pkg = ".", key = new_key()) {
+recrypt <- function(pkg, key = new_key()) {
   message("Re-encrypting all files with new key")
   pkg <- devtools::as.package(pkg)
 
@@ -88,7 +88,7 @@ recrypt_file <- function(path, old_key, new_key) {
   writeBin(enc, path)
 }
 
-load_users <- function(pkg = ".") {
+load_users <- function(pkg) {
   pkg <- devtools::as.package(pkg)
 
   path <- file.path(pkg$path, "secure", "users.json")
@@ -104,7 +104,7 @@ load_users <- function(pkg = ".") {
   })
 }
 
-save_users <- function(users, pkg = ".") {
+save_users <- function(users, pkg) {
   pkg <- devtools::as.package(pkg)
   users <- lapply(users, function(x) {
     x$name <- jsonlite::unbox(x$name)
