@@ -23,7 +23,7 @@
 #' remove_user("travis")
 #' }
 add_user <- function(name, public_key, pkg = ".") {
-  pkg <- devtools::as.package(pkg)
+  pkg <- as.package(pkg)
   stopifnot(inherits(public_key, "public.key"))
 
   new_user <- list(name = name, public_key = public_key)
@@ -36,7 +36,7 @@ add_user <- function(name, public_key, pkg = ".") {
 #' @rdname add_user
 #' @export
 remove_user <- function(name, pkg = ".") {
-  pkg <- devtools::as.package(pkg)
+  pkg <- as.package(pkg)
   users <- load_users(pkg)
 
   matching <- vapply(users, function(x) identical(x$name, name), logical(1))
@@ -50,7 +50,7 @@ remove_user <- function(name, pkg = ".") {
 
 recrypt <- function(pkg, key = new_key()) {
   message("Re-encrypting all files with new key")
-  pkg <- devtools::as.package(pkg)
+  pkg <- as.package(pkg)
   old_key <- my_key()
 
   # Encrypt new password for each user
@@ -59,8 +59,7 @@ recrypt <- function(pkg, key = new_key()) {
   save_users(users, pkg = pkg)
 
   # Decrypt & reencrypt each file
-  files <- dir(file.path(pkg$path, "secure"), "\\.rds\\.enc$",
-    full.names = TRUE)
+  files <- dir(pkg$vault, "\\.rds\\.enc$", full.names = TRUE)
   lapply(files, recrypt_file, old_key = old_key, new_key = key)
 
   invisible(TRUE)
@@ -91,9 +90,9 @@ recrypt_file <- function(path, old_key, new_key) {
 }
 
 load_users <- function(pkg) {
-  pkg <- devtools::as.package(pkg)
+  pkg <- as.package(pkg)
 
-  path <- file.path(pkg$path, "secure", "users.json")
+  path <- file.path(pkg$vault, "users.json")
   if (!file.exists(path)) {
     users <- list()
   } else {
@@ -107,14 +106,14 @@ load_users <- function(pkg) {
 }
 
 save_users <- function(users, pkg) {
-  pkg <- devtools::as.package(pkg)
+  pkg <- as.package(pkg)
   users <- lapply(users, function(x) {
     x$name <- jsonlite::unbox(x$name)
     x$public_key <- PKI::PKI.save.key(x$public_key, "PEM")
     x
   })
 
-  path <- file.path(pkg$path, "secure", "users.json")
+  path <- file.path(pkg$vault, "users.json")
   writeLines(jsonlite::toJSON(users, pretty = TRUE), path)
   invisible(TRUE)
 }

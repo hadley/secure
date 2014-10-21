@@ -13,7 +13,7 @@
 #' decrypt("test")
 #' }
 encrypt <- function(.name, ..., .pkg = ".") {
-  pkg <- devtools::as.package(.pkg)
+  pkg <- as.package(pkg)
   key <- my_key()
 
   values <- list(...)
@@ -33,7 +33,7 @@ encrypt <- function(.name, ..., .pkg = ".") {
 #' @rdname encrypt
 #' @export
 decrypt <- function(name, pkg = ".") {
-  pkg <- devtools::as.package(pkg)
+  pkg <- as.package(pkg)
   key <- my_key(pkg = pkg)
 
   path <- locker_path(name, pkg)
@@ -49,16 +49,17 @@ decrypt <- function(name, pkg = ".") {
 
 locker_path <- function(name, pkg = ".") {
   stopifnot(is.character(name), length(name) == 1)
-  pkg <- devtools::as.package(pkg)
+  pkg <- as.package(pkg)
 
   if (!grepl("\\.rds.enc", name)) {
     name <- paste0(name, ".rds.enc")
   }
 
-  file.path(pkg$path, "secure", name)
+  file.path(pkg$vault, name)
 }
 
 my_key <- function(key = local_key(), pkg = ".") {
+  pkg <- as.package(pkg)
   # Travis needs a slightly different strategy because we can't access the
   # private key - instead we let travis encrypt the key in an env var
   if (is_travis()) {

@@ -7,6 +7,10 @@
 #' @param pkg Path to package. Defaults to working directory.
 #' @export
 use_secure <- function(pkg = ".") {
+  if (!requireNamespace("devtools", quietly = TRUE)) {
+    stop("Please install devtools", call. = FALSE)
+  }
+
   pkg <- devtools::as.package(pkg)
 
   secure_path <- file.path(pkg$path, "secure")
