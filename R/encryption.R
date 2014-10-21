@@ -90,11 +90,12 @@ is_travis <- function() {
 #' This ensures that we can find your private key, and you can decrypt
 #' the encrypted master key.
 #'
+#' @param pkg Path to package with secure vault
 #' @return A boolean flag.
 #' @export
-has_key <- function() {
+has_key <- function(pkg = ".") {
   tryCatch({
-    my_key
+    my_key(pkg = pkg)
     TRUE
   }, error = function(e) FALSE)
 }
@@ -106,13 +107,14 @@ has_key <- function() {
 #' assets. Skipped tests do not generate an error in R CMD check etc, but
 #' will print a visible notification.
 #'
+#' @param pkg Path to package with secure vault
 #' @export
-skip_when_missing_key <- function() {
+skip_when_missing_key <- function(pkg = ".") {
 
   if (!requireNamespace("testthat", quietly = TRUE)) {
     stop("testthat not installed", call. = FALSE)
   }
 
-  if (has_key()) return()
+  if (has_key(pkg)) return()
   testthat::skip("Credentials to unlock secure files not available.")
 }

@@ -3,7 +3,10 @@
 \alias{has_key}
 \title{Can you unlock the secure storage?}
 \usage{
-has_key()
+has_key(pkg = ".")
+}
+\arguments{
+\item{pkg}{Path to package with secure vault}
 }
 \value{
 A boolean flag.
