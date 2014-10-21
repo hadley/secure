@@ -11,6 +11,9 @@ before_install:
 install:
   - ./travis-tool.sh github_package s-u/PKI
   - ./travis-tool.sh install_deps
+  - echo $SECURE_KEY
+  - R CMD install .
+  - R -e "secure:::my_key(vault = 'secure')"
 
 script: ./travis-tool.sh run_tests
 
