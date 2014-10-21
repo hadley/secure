@@ -18,11 +18,11 @@ devtools::install_github("hadley/secure")
 
 To get started, run `secure::use_secure()` in a package working directory. This will:
 
-* Create a `secure/` directory.
+* Create a `vault/` directory.
 * Add it to `.Rbuildignore`.
 * Add secure to the `Suggests` field in `DESCRIPTION`.
 
-Next, add yourself as as user with `secure::add_user("your name", local_key())`. This will add your name and public key to `secure/.users.json`.  (Add other people using their `github_key()`s, and add travis using `travis_key()`.)
+Next, add yourself as as user with `secure::add_user("your name", local_key())`. This will add your name and public key to `vault/users.json`.  (Add other people using their `github_key()`s, and add travis using `travis_key()`.)
 
 Now you can start adding encrypted data:
 
@@ -37,7 +37,7 @@ This creates `secure/google.rds.enc`, an encrypted rds file.
 
 Each file is encrypted (using AES256) with the same master key. The master key is not stored unencrypted anywhere, instead it's encrypted once for each user, using their public key. 
 
-When you add a new user (or remove an old user), a new master key is generated and all files are rencrypted.
+When you add a new user (or remove an old user), a new master key is generated and all files are re-encrypted.
 
 ## Caveats
 
