@@ -7,7 +7,6 @@ before_install:
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
   - ls ~/.ssh/
-  - echo $SECURE_KEY
 
 install:
   - ./travis-tool.sh github_package s-u/PKI
@@ -24,4 +23,4 @@ notifications:
     on_failure: change
 
 env:
-  - secure: u7HuwKR6poyF0hZNZUm0705UFt7toWD8MVV1NlTZ/c6Os760oBCgMwSnOeo1gmRO+ho8uWRClYX3vnpf/rn+Sokxx4MkKq8MIo00PD7216EKjGZ/tyaopEz6bxZCOaMCjoGsvkv975lkPe1NuXk22RSvxvZrqwKGcx7FJ0bUvxQ=
+  - secure: GP6VjVgnz/oJNmP4tzbApeImD1I2iLb/nFzx9qi5EXc5DOalB3eJon6PFU4BQXew93k9W0ikrMYMaJSSOb95fHzf+uDkuzq0cPdDri+aukD6zRY4PWWKuf3CmB4FOiQn5h8vLPM31ZvXmfh/saqtr1VOEiCFscCudnRpO4smhQw=
