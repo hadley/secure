@@ -6,14 +6,10 @@ before_install:
   - curl -OL http://raw.github.com/craigcitro/r-travis/master/scripts/travis-tool.sh
   - chmod 755 ./travis-tool.sh
   - ./travis-tool.sh bootstrap
-  - ls ~/.ssh/
 
 install:
   - ./travis-tool.sh github_package s-u/PKI
   - ./travis-tool.sh install_deps
-  - echo $SECURE_KEY
-  - R CMD install .
-  - R -e "secure:::my_key(vault = 'secure')"
 
 script: ./travis-tool.sh run_tests
 
@@ -26,4 +22,4 @@ notifications:
     on_failure: change
 
 env:
-  - secure: GP6VjVgnz/oJNmP4tzbApeImD1I2iLb/nFzx9qi5EXc5DOalB3eJon6PFU4BQXew93k9W0ikrMYMaJSSOb95fHzf+uDkuzq0cPdDri+aukD6zRY4PWWKuf3CmB4FOiQn5h8vLPM31ZvXmfh/saqtr1VOEiCFscCudnRpO4smhQw=
+  - secure: MB0MrYtVcbcGRBhk7IpKFMPQQHPrqGCosYQ610UYoTjkUH4t3+xVqjcqpqows/GeDLgJSaoWF9Yw6mCw+IVCQNaVstQqmSHmOoPg2x+QqJ7UHYQdltNDXVh+d2dtLcxlHnUHfE8aY5u8NPdlRyNVZltS3d1PEGOAYgBjOBSTl/E=
