@@ -51,16 +51,17 @@ remove_user <- function(name, pkg = ".") {
 recrypt <- function(pkg, key = new_key()) {
   message("Re-encrypting all files with new key")
   pkg <- devtools::as.package(pkg)
+  old_key <- my_key()
 
   # Encrypt new password for each user
   users <- load_users(pkg)
   users <- lapply(users, recrypt_user, key = key)
-  save_users(users)
+  save_users(users, pkg = pkg)
 
   # Decrypt & reencrypt each file
   files <- dir(file.path(pkg$path, "secure"), "\\.rds\\.enc$",
     full.names = TRUE)
-  lapply(files, recrypt_file, old_key = my_key(), new_key = key)
+  lapply(files, recrypt_file, old_key = old_key, new_key = key)
 
   invisible(TRUE)
 }
@@ -83,6 +84,7 @@ recrypt_user <- function(x, key) {
 
 recrypt_file <- function(path, old_key, new_key) {
   enc <- readBin(path, "raw", file.info(path)$size)
+
   dec <- PKI::PKI.decrypt(enc, old_key, "AES-256")
   enc <- PKI::PKI.encrypt(dec, new_key, "AES-256")
   writeBin(enc, path)
