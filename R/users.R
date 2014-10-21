@@ -78,7 +78,7 @@ recrypt <- function(path, old_key, new_key) {
 load_users <- function(pkg = ".") {
   pkg <- devtools::as.package(pkg)
 
-  path <- file.path(pkg$path, "secure", ".users.json")
+  path <- file.path(pkg$path, "secure", "users.json")
   if (!file.exists(path)) {
     users <- list()
   } else {
@@ -99,7 +99,7 @@ save_users <- function(users, pkg = ".") {
     x
   })
 
-  path <- file.path(pkg$path, "secure", ".users.json")
+  path <- file.path(pkg$path, "secure", "users.json")
   writeLines(jsonlite::toJSON(users, pretty = TRUE), path)
   invisible(TRUE)
 }
