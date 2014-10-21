@@ -62,7 +62,7 @@ my_key <- function(key = local_key(), pkg = ".") {
   # Travis needs a slightly different strategy because we can't access the
   # private key - instead we let travis encrypt the key in an env var
   if (is_travis()) {
-    return(Sys.getenv("SECURE_KEY"))
+    return(base64enc::base64decode(Sys.getenv("SECURE_KEY")))
   }
 
   der <- PKI::PKI.save.key(key, "DER")

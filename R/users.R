@@ -68,12 +68,12 @@ recrypt_all <- function(pkg = ".", key = new_key()) {
 recrypt_user <- function(x, key) {
   x$key <- base64enc::base64encode(PKI::PKI.encrypt(key, x$public_key))
   if (identical(x$name, "travis")) {
-    envvar <- charToRaw(paste0("KEY=", base64enc::base64encode(key)))
+    envvar <- charToRaw(paste0("SECURE_KEY=", base64enc::base64encode(key)))
     secure <- base64enc::base64encode(PKI::PKI.encrypt(envvar, x$public_key))
 
     message(
       "Please add/replace the following yaml in .travis.yaml:\n",
-      "  env: \n",
+      "env: \n",
       "  - secure: ", secure, "\n"
     )
   }
