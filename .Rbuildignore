@@ -1,4 +1,3 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^secure$
 ^\.travis\.yml$

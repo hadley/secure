@@ -4,9 +4,9 @@
 \alias{remove_user}
 \title{Add and remove users user.}
 \usage{
-add_user(name, public_key, pkg = ".")
+add_user(name, public_key, vault = NULL)
 
-remove_user(name, pkg = ".")
+remove_user(name, vault = ".")
 }
 \arguments{
 \item{name}{Name of user. Currently only used to help you remember who
@@ -14,7 +14,9 @@ owns the public key}
 
 \item{public_key}{Users public key.}
 
-\item{pkg}{Path to package. Defaults to working directory}
+\item{vault}{Name of secure vault. If \code{NULL} looks for
+\code{vault} or \code{inst/vault} in the current directory. If a string,
+looks for a secure vault in the package with that name}
 }
 \description{
 Adding or removing users will re-generate the master key and re-encrypt all

@@ -3,10 +3,12 @@
 \alias{skip_when_missing_key}
 \title{Skip tests when you can't unlock}
 \usage{
-skip_when_missing_key(pkg = ".")
+skip_when_missing_key(vault = NULL)
 }
 \arguments{
-\item{pkg}{Path to package with secure vault}
+\item{vault}{Name of secure vault. If \code{NULL} looks for
+\code{vault} or \code{inst/vault} in the current directory. If a string,
+looks for a secure vault in the package with that name}
 }
 \description{
 This is useful to place at the top of tests that rely on access to secured

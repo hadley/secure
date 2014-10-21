@@ -2,7 +2,9 @@
 #'
 #' @param .name,name Name of storage locker.
 #' @param ... Name-value pairs of objects to store.
-#' @param .pkg,pkg Path to package. Defaults to current directory.
+#' @param .vault,vault Name of secure vault. If \code{NULL} looks for
+#'   \code{vault} or \code{inst/vault} in the current directory. If a string,
+#'   looks for a secure vault in the package with that name
 #' @export
 #' @examples
 #' \dontrun{
@@ -12,16 +14,16 @@
 #'
 #' decrypt("test")
 #' }
-encrypt <- function(.name, ..., .pkg = ".") {
-  pkg <- as.package(pkg)
+encrypt <- function(.name, ..., .vault = NULL) {
+  vault <- find_vault(.vault)
   key <- my_key()
 
   values <- list(...)
-  path <- locker_path(.name, pkg)
+  path <- locker_path(.name, vault)
 
   if (file.exists(path)) {
     message("Merging with existing data")
-    old_values <- decrypt(basename(path), pkg = pkg)
+    old_values <- decrypt(basename(path), vault = vault)
     values <- modifyList(old_values, values)
   }
 
@@ -32,11 +34,11 @@ encrypt <- function(.name, ..., .pkg = ".") {
 
 #' @rdname encrypt
 #' @export
-decrypt <- function(name, pkg = ".") {
-  pkg <- as.package(pkg)
-  key <- my_key(pkg = pkg)
+decrypt <- function(name, vault = NULL) {
+  vault <- find_vault(vault)
+  key <- my_key(vault = vault)
 
-  path <- locker_path(name, pkg)
+  path <- locker_path(name, vault)
   if (!file.exists(path)) {
     stop(path, " does not exist", call. = FALSE)
   }
@@ -47,19 +49,18 @@ decrypt <- function(name, pkg = ".") {
   unserialize(dec)
 }
 
-locker_path <- function(name, pkg = ".") {
+locker_path <- function(name, vault) {
   stopifnot(is.character(name), length(name) == 1)
-  pkg <- as.package(pkg)
+  vault <- find_vault(vault)
 
   if (!grepl("\\.rds.enc", name)) {
     name <- paste0(name, ".rds.enc")
   }
-
-  file.path(pkg$vault, name)
+  file.path(vault, name)
 }
 
-my_key <- function(key = local_key(), pkg = ".") {
-  pkg <- as.package(pkg)
+my_key <- function(key = local_key(), vault = NULL) {
+  vault <- find_vault(vault)
   # Travis needs a slightly different strategy because we can't access the
   # private key - instead we let travis encrypt the key in an env var
   if (is_travis()) {
@@ -69,7 +70,7 @@ my_key <- function(key = local_key(), pkg = ".") {
   der <- PKI::PKI.save.key(key, "DER")
   same_key <- function(x) identical(PKI::PKI.save.key(x$public_key, "DER"), der)
 
-  me <- Filter(same_key, load_users(pkg))
+  me <- Filter(same_key, load_users(vault))
   if (length(me) == 0) {
     stop("No user matches public key ", format(key), call. = FALSE)
   } else if (length(me) > 1) {
@@ -90,12 +91,14 @@ is_travis <- function() {
 #' This ensures that we can find your private key, and you can decrypt
 #' the encrypted master key.
 #'
-#' @param pkg Path to package with secure vault
+#' @param vault Name of secure vault. If \code{NULL} looks for
+#'   \code{vault} or \code{inst/vault} in the current directory. If a string,
+#'   looks for a secure vault in the package with that name
 #' @return A boolean flag.
 #' @export
-has_key <- function(pkg = ".") {
+has_key <- function(vault = NULL) {
   tryCatch({
-    my_key(pkg = pkg)
+    my_key(vault = vault)
     TRUE
   }, error = function(e) FALSE)
 }
@@ -107,14 +110,14 @@ has_key <- function(pkg = ".") {
 #' assets. Skipped tests do not generate an error in R CMD check etc, but
 #' will print a visible notification.
 #'
-#' @param pkg Path to package with secure vault
+#' @inheritParams has_key
 #' @export
-skip_when_missing_key <- function(pkg = ".") {
+skip_when_missing_key <- function(vault = NULL) {
 
   if (!requireNamespace("testthat", quietly = TRUE)) {
     stop("testthat not installed", call. = FALSE)
   }
 
-  if (has_key(pkg)) return()
+  if (has_key(vault)) return()
   testthat::skip("Credentials to unlock secure files not available.")
 }

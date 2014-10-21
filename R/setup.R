@@ -13,10 +13,9 @@ use_secure <- function(pkg = ".") {
 
   pkg <- devtools::as.package(pkg)
 
-  secure_path <- file.path(pkg$path, "vault")
-  dir.create(secure_path, showWarnings = FALSE)
+  secure_path <- file.path(pkg$path, "inst", "vault")
+  dir.create(secure_path, showWarnings = FALSE, recursive = TRUE)
 
-  devtools::use_build_ignore("vault", pkg = pkg)
   devtools::use_package("secure", "Suggests", pkg = pkg)
 
   invisible(TRUE)

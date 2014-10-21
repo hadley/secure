@@ -18,7 +18,7 @@ devtools::install_github("hadley/secure")
 
 To get started, run `secure::use_secure()` in a package working directory. This will:
 
-* Create a `vault/` directory.
+* Create a `inst/vault/` directory.
 * Add it to `.Rbuildignore`.
 * Add secure to the `Suggests` field in `DESCRIPTION`.
 

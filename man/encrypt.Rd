@@ -4,16 +4,18 @@
 \alias{encrypt}
 \title{Encrypt and decrypt data.}
 \usage{
-encrypt(.name, ..., .pkg = ".")
+encrypt(.name, ..., .vault = NULL)
 
-decrypt(name, pkg = ".")
+decrypt(name, vault = NULL)
 }
 \arguments{
 \item{.name,name}{Name of storage locker.}
 
 \item{...}{Name-value pairs of objects to store.}
 
-\item{.pkg,pkg}{Path to package. Defaults to current directory.}
+\item{.vault,vault}{Name of secure vault. If \code{NULL} looks for
+\code{vault} or \code{inst/vault} in the current directory. If a string,
+looks for a secure vault in the package with that name}
 }
 \description{
 Encrypt and decrypt data.

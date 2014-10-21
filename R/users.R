@@ -6,7 +6,7 @@
 #' @param name Name of user. Currently only used to help you remember who
 #'   owns the public key
 #' @param public_key Users public key.
-#' @param pkg Path to package. Defaults to working directory
+#' @inheritParams has_key
 #' @export
 #' @examples
 #' \dontrun{
@@ -22,44 +22,44 @@
 #' add_user("travis", travis_key("hadley/secure"))
 #' remove_user("travis")
 #' }
-add_user <- function(name, public_key, pkg = ".") {
-  pkg <- as.package(pkg)
+add_user <- function(name, public_key, vault = NULL) {
+  vault <- find_vault(vault)
   stopifnot(inherits(public_key, "public.key"))
 
   new_user <- list(name = name, public_key = public_key)
-  users <- c(load_users(pkg), list(new_user))
-  save_users(users, pkg = pkg)
+  users <- c(load_users(vault), list(new_user))
+  save_users(users, vault = vault)
 
-  recrypt(pkg)
+  recrypt(vault)
 }
 
 #' @rdname add_user
 #' @export
-remove_user <- function(name, pkg = ".") {
-  pkg <- as.package(pkg)
-  users <- load_users(pkg)
+remove_user <- function(name, vault = ".") {
+  vault <- find_vault(vault)
+  users <- load_users(vault)
 
   matching <- vapply(users, function(x) identical(x$name, name), logical(1))
   if (!any(matching)) {
     stop("Could not find user called ", name, call. = FALSE)
   }
 
-  save_users(users[!matching], pkg = pkg)
-  recrypt(pkg)
+  save_users(users[!matching], vault = vault)
+  recrypt(vault)
 }
 
-recrypt <- function(pkg, key = new_key()) {
+recrypt <- function(vault, key = new_key()) {
   message("Re-encrypting all files with new key")
-  pkg <- as.package(pkg)
-  old_key <- my_key()
+  vault <- find_vault(vault)
+  old_key <- my_key(vault = vault)
 
   # Encrypt new password for each user
-  users <- load_users(pkg)
+  users <- load_users(vault)
   users <- lapply(users, recrypt_user, key = key)
-  save_users(users, pkg = pkg)
+  save_users(users, vault = vault)
 
   # Decrypt & reencrypt each file
-  files <- dir(pkg$vault, "\\.rds\\.enc$", full.names = TRUE)
+  files <- dir(vault, "\\.rds\\.enc$", full.names = TRUE)
   lapply(files, recrypt_file, old_key = old_key, new_key = key)
 
   invisible(TRUE)
@@ -89,10 +89,10 @@ recrypt_file <- function(path, old_key, new_key) {
   writeBin(enc, path)
 }
 
-load_users <- function(pkg) {
-  pkg <- as.package(pkg)
+load_users <- function(vault) {
+  vault <- find_vault(vault)
 
-  path <- file.path(pkg$vault, "users.json")
+  path <- file.path(vault, "users.json")
   if (!file.exists(path)) {
     users <- list()
   } else {
@@ -105,15 +105,15 @@ load_users <- function(pkg) {
   })
 }
 
-save_users <- function(users, pkg) {
-  pkg <- as.package(pkg)
+save_users <- function(users, vault) {
+  vault <- find_vault(vault)
   users <- lapply(users, function(x) {
     x$name <- jsonlite::unbox(x$name)
     x$public_key <- PKI::PKI.save.key(x$public_key, "PEM")
     x
   })
 
-  path <- file.path(pkg$vault, "users.json")
+  path <- file.path(vault, "users.json")
   writeLines(jsonlite::toJSON(users, pretty = TRUE), path)
   invisible(TRUE)
 }
