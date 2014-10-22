@@ -16,7 +16,6 @@
 #' }
 encrypt <- function(.name, ..., .vault = NULL) {
   vault <- find_vault(.vault)
-  key <- my_key()
 
   values <- list(...)
   path <- locker_path(.name, vault)
@@ -28,7 +27,7 @@ encrypt <- function(.name, ..., .vault = NULL) {
   }
 
   ser <- serialize(values, connection = NULL)
-  enc <- PKI::PKI.encrypt(ser, key, "AES-256")
+  enc <- PKI::PKI.encrypt(ser, my_key(vault), "AES-256")
   writeBin(enc, path)
 }
 
@@ -36,7 +35,6 @@ encrypt <- function(.name, ..., .vault = NULL) {
 #' @export
 decrypt <- function(name, vault = NULL) {
   vault <- find_vault(vault)
-  key <- my_key(vault = vault)
 
   path <- locker_path(name, vault)
   if (!file.exists(path)) {
@@ -44,7 +42,7 @@ decrypt <- function(name, vault = NULL) {
   }
 
   enc <- readBin(path, "raw", file.info(path)$size * 1.1)
-  dec <- PKI::PKI.decrypt(enc, key, "AES-256")
+  dec <- PKI::PKI.decrypt(enc, my_key(vault), "AES-256")
 
   unserialize(dec)
 }
@@ -59,7 +57,7 @@ locker_path <- function(name, vault) {
   file.path(vault, name)
 }
 
-my_key <- function(key = local_key(), vault = NULL) {
+my_key <- function(vault, key = local_key()) {
   vault <- find_vault(vault)
   # Travis needs a slightly different strategy because we can't access the
   # private key - instead we let travis encrypt the key in an env var
@@ -98,7 +96,7 @@ is_travis <- function() {
 #' @export
 has_key <- function(vault = NULL) {
   tryCatch({
-    my_key(vault = vault)
+    my_key(vault)
     TRUE
   }, error = function(e) FALSE)
 }

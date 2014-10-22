@@ -51,7 +51,7 @@ remove_user <- function(name, vault = ".") {
 recrypt <- function(vault, key = new_key()) {
   message("Re-encrypting all files with new key")
   vault <- find_vault(vault)
-  old_key <- my_key(vault = vault)
+  old_key <- my_key(vault)
 
   # Encrypt new password for each user
   users <- load_users(vault)
