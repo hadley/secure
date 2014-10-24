@@ -76,8 +76,13 @@ my_key <- function(vault, key = local_key()) {
       call. = FALSE)
   }
 
+  my_key <- me[[1]]$key
+  if (is.null(my_key)) {
+    return(NULL)
+  }
+
   private_key <- PKI::PKI.load.key(file = "~/.ssh/id_rsa")
-  PKI::PKI.decrypt(base64enc::base64decode(me[[1]]$key), private_key)
+  PKI::PKI.decrypt(base64enc::base64decode(my_key), private_key)
 }
 
 is_travis <- function() {

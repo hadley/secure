@@ -49,18 +49,21 @@ remove_user <- function(name, vault = ".") {
 }
 
 recrypt <- function(vault, key = new_key()) {
-  message("Re-encrypting all files with new key")
   vault <- find_vault(vault)
   old_key <- my_key(vault)
 
   # Encrypt new password for each user
+  message("Generating new master keys")
   users <- load_users(vault)
   users <- lapply(users, recrypt_user, key = key)
   save_users(users, vault = vault)
 
   # Decrypt & reencrypt each file
   files <- dir(vault, "\\.rds\\.enc$", full.names = TRUE)
-  lapply(files, recrypt_file, old_key = old_key, new_key = key)
+  if (length(files) > 0) {
+    message("Re-encrypting all files with new key")
+    lapply(files, recrypt_file, old_key = old_key, new_key = key)
+  }
 
   invisible(TRUE)
 }
