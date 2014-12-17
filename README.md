@@ -22,7 +22,7 @@ To get started:
 
 * Create a `vault` directory.
 
-* Add yourself as as user with `secure::add_user("your name", local_key())`. 
+* Add yourself as as user with `secure::add_user("your name", secure::local_key())`. 
   This will add your name and public key to `vault/users.json`.
   (You can add other people from their `github_key()`s).
 
