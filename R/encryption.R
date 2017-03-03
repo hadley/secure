@@ -81,7 +81,7 @@ my_key <- function(vault, key = local_key()) {
     return(NULL)
   }
 
-  private_key <- PKI::PKI.load.key(file = "~/.ssh/id_rsa")
+  private_key <- PKI::PKI.load.key(file = getOption("secure.private_key_file"))
   PKI::PKI.decrypt(base64enc::base64decode(my_key), private_key)
 }
 

@@ -1,4 +1,17 @@
+options(secure.private_key_file = "~/.ssh/id_rsa")
+options(secure.public_key_file = "~/.ssh/id_rsa.pub")
+
 #' Retrieve public keys.
+#' 
+#' Retrieve public keys from local key, travis or github.
+#' 
+#' Local public key:
+#' 
+#' If using a local key, then the  location of this key is defined by setting an option. The default value of this key is \code{options(secure.public_key_file = "~/.ssh/id_rsa.pub")}
+#' 
+#' Local private key:
+#' 
+#' The default location for the local private key is defined by \code{options(secure.private_key_file = "~/.ssh/id_rsa")}
 #'
 #' @name keys
 #' @examples
@@ -40,10 +53,10 @@ github_key <- function(username, i = 1) {
 }
 
 #' @rdname keys
-#' @param name Name of key. If missing, uses first file in directory,
-#'   otherwise uses first file that matches \code{name}.
+#' @param name Name of key. Defaults to \code{~/.ssh/id_rsa}. If null, uses first file in the \code{~/.ssh} directory, otherwise uses first file in \code{~/.ssh} that matches \code{name}.
 #' @export
-local_key <- function(name = "id_rsa") {
+local_key <- function(name = getOption("secure.public_key_file")) {
+  if(file.exists(name)) return(parse_pubkey(name))
   public_keys <- dir("~/.ssh", pattern = "\\.(pub|pem)$", full.names = TRUE)
 
   if (is.null(name)) {
