@@ -5,6 +5,8 @@
 #' to re-encrypt the strings if the master key changes (i.e. when you
 #' add or remove users).
 #'
+#' @inherit encrypt
+#' @param x Character string to encode
 #' @export
 #' @examples
 #' \dontrun{

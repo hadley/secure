@@ -6,6 +6,7 @@
 #'   \code{vault} or \code{inst/vault} in the current directory. If a string,
 #'   looks for a secure vault in the package with that name
 #' @export
+#' @importFrom utils modifyList
 #' @examples
 #' \dontrun{
 #' encrypt("test", x = 1, y = 2)

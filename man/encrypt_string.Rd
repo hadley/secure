@@ -9,6 +9,13 @@ encrypt_string(x, vault = NULL)
 
 decrypt_string(x, vault = NULL)
 }
+\arguments{
+\item{x}{Character string to encode}
+
+\item{vault}{Name of secure vault. If \code{NULL} looks for
+\code{vault} or \code{inst/vault} in the current directory. If a string,
+looks for a secure vault in the package with that name}
+}
 \description{
 This is useful if you want to email secrets to your collaborators. It's
 only suitable for short-term communication because there's no way
